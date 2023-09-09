@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const dbConfig = require('./config/database.config.js');
 const mongoose = require('mongoose');
+const mysql = require('mysql');
 const cors = require('cors');
 // mongoose.Promise = global.Promise;
 var indexRouter = require('./routes/index');
@@ -30,13 +31,24 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.connect(dbConfig.url, {
-  useNewUrlParser: true
+  useNewUrlParser: true, 
+  useUnifiedTopology: true
 }).then(() => {
-  console.log("Successfully connected to the database");
+  console.log("Mongodb connected Successfully!");
 }).catch(err => {
-  console.log('Could not connect to the database. Exiting now...', err);
+  console.log('Could not connect to the Mongodb. Exiting now...', err);
   process.exit();
 });
+
+// var con = mysql.createConnection({
+//   host: "localhost",
+//   user: "sqluser",
+//   password: "Sql@3456"
+// });
+// con.connect(function(err) {
+//   if (err) throw err;
+//   console.log("Mysql Connected Successfully!");
+// });
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

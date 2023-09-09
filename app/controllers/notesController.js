@@ -1,4 +1,5 @@
-const Note = require('../models/note.model.js');
+// const Note = require('../models/note.model.js');
+const MySql = require('../models/mySql/user.model.js');
 
 module.exports.create = (req, res) =>{
   // Validate request
@@ -9,15 +10,15 @@ module.exports.create = (req, res) =>{
   }
 
   // Create a Note
-  const note = new Note(req.body);
+//   const note = new Note(req.body);
 
   // Save Note in the database
-  note.save()
-  .then(data => {
-      res.send(data);
-  }).catch(err => {
-      res.status(500).send({
-          message: err.message || "Some error occurred while creating the Note."
-      });
-  });
+//   note.save()
+//   .then(data => {
+//       res.send(data);
+//   }).catch(err => {
+//       res.status(500).send({
+//           message: err.message || "Some error occurred while creating the Note."
+//       });
+//   });
 }
