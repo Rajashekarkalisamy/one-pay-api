@@ -1,36 +1,38 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-const dbConfig = require('./config/database.config.js');
+/* Dependencies Injection */
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const mongoose = require('mongoose');
-const mysql = require('mysql');
 const cors = require('cors');
-// mongoose.Promise = global.Promise;
-var indexRouter = require('./routes/index');
-var usersRouter = require('./app/routes/users');
-var noteRouter = require('./app/routes/notes');
 
+/* Environment variable kickstart */
+require('dotenv').config()
+
+/* Configulations */
+const dbConfig = require('./config/database.config.js');
+
+/* Routing Files */
+const indexRouter = require('./routes/index');
+const usersRouter = require('./app/routes/users');
+const noteRouter = require('./app/routes/notes');
+
+/* Server initiation */
 var app = express();
 
-// view engine setup
+/* view engine setup */
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
-// const corsOptions = {
-//   origin: 'http://localhost:3000',
-//   credentials: true,            //access-control-allow-credentials:true
-//   optionSuccessStatus: 200
-// }
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-mongoose.connect(dbConfig.url, {
+mongoose.connect(dbConfig.mongo.url, {
   useNewUrlParser: true, 
   useUnifiedTopology: true
 }).then(() => {
@@ -40,15 +42,6 @@ mongoose.connect(dbConfig.url, {
   process.exit();
 });
 
-// var con = mysql.createConnection({
-//   host: "localhost",
-//   user: "sqluser",
-//   password: "Sql@3456"
-// });
-// con.connect(function(err) {
-//   if (err) throw err;
-//   console.log("Mysql Connected Successfully!");
-// });
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

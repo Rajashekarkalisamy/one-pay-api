@@ -1,5 +1,4 @@
-// const Note = require('../models/note.model.js');
-const MySql = require('../models/mySql/user.model.js');
+const Note = require('../models/note.model.js');
 
 module.exports.create = (req, res) =>{
   // Validate request

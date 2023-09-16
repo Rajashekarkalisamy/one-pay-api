@@ -1,16 +1,17 @@
+/* Mongo Credentials */
+const sequelize = require("sequelize");
+
 module.exports.mongo = {
-    mongo: {
-        url: "mongodb://localhost:27017/onepay",
-    }
-};
+  url: process.env.MONGO_URL
+}
 
-
-// config.js
-module.exports.mysql = {
-  mysql: {
-    host: "localhost",
-    user: "sqluser",
-    password: "Sql@3456",
-    db: "one_pay",
+/* Mysql Connection */
+module.exports.mysql = new sequelize(
+  process.env.MYSQL_DATABASE,
+  process.env.MYSQL_USERNAME,
+  process.env.MYSQL_PASSWORD,
+  {
+      dialect: "mysql",
+      host: process.env.MYSQL_HOST,
   }
-};
+);
