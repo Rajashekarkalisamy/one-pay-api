@@ -1,35 +1,44 @@
-const User = require('../models/user.model.js');
+const model = require('../models/index');
+const { Op } = require("sequelize");
+const Responser = require("../response/index");
+let Validator = require('validatorjs');
 
-module.exports.create = (req, res) => {
-    // Validate request
+module.exports.create = async (req, res) => {
+    let response;
 
-    if (!req.body) {
-        return res.status(400).send({
-            message: "Request Body can't be empty"
-        });
-    }
-
-    // Create a Note
-    const user = new User(req.body);
-
-    // Save Note in the database
-    user.save()
-        .then(data => {
-            res.send(data);
-        }).catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while creating the User."
-            });
-        });
-}
-
-module.exports.userslist = (req, res) => {
-    User.find({}, (err, docs) => {
-        if (err) {
-            return res.status(500).send({
-                message: err.message || "Some error occurred while creating the User."
-            });
-        }
-        return res.status(200).send(docs)
+    let validation = new Validator(req.body, {
+        email: 'required|email'
     });
+
+    if (validation.passes()) {
+        try {
+            let userName = req.body.email.split('@')[0];
+            const userData = {
+                email: req.body.email,
+                username: userName
+            }
+            const checkData = await model.user.findAll({
+                where: {
+                    [Op.or]: {
+                        email: req.body.email,
+                        username: userName
+                    },
+                },
+            });
+            if (checkData.length > 0) {
+                response = Responser.custom("R201");
+            } else {
+                await model.user
+                    .create(userData)
+                    .then((result) => {
+                        response = Responser.success(userData);
+                    });
+            }
+        } catch (error) {
+            response = Responser.error(error);
+        }
+    } else {
+        response = Responser.validationfail(validation.errors)
+    }
+    return res.status(response.statusCode).send(response.data);
 }
