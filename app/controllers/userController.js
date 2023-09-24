@@ -4,11 +4,12 @@ const Responser = require("../response/index");
 let Validator = require('validatorjs');
 
 module.exports.create = async (req, res) => {
-    let response;
-
+  
     let validation = new Validator(req.body, {
         email: 'required|email'
     });
+
+    let response;
 
     if (validation.passes()) {
         try {

@@ -4,6 +4,7 @@ const message = {
     "R400": "Bad Request",
     "R404": "Something Went Wrong, Please Try after sometime"
 }
+
 const getMessage = (code) => {
     return message[code] ? message[code] : "";
 }
