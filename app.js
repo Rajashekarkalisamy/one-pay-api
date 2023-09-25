@@ -32,15 +32,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// mongoose.connect(dbConfig.mongo.url, {
-//   useNewUrlParser: true, 
-//   useUnifiedTopology: true
-// }).then(() => {
-//   console.log("Mongodb connected Successfully!");
-// }).catch(err => {
-//   console.log('Could not connect to the Mongodb. Exiting now...', err);
-//   process.exit();
-// });
+mongoose.connect(dbConfig.mongo.url, {
+  useNewUrlParser: true, 
+  useUnifiedTopology: true
+}).then(() => {
+  console.log("Mongodb connected Successfully!");
+}).catch(err => {
+  console.log('Could not connect to the Mongodb. Exiting now...', err);
+  process.exit();
+});
 
 
 app.use('/', indexRouter);

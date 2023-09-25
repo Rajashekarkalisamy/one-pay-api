@@ -1,11 +1,21 @@
 version: "3.0"
 services:
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongo
+    volumes:
+      - ./mongo:/data/db
+    ports:
+      - '27018:27017'
   node:
     build: .
     working_dir: /usr/src/app
     volumes:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
+    links:
+      - mongo
     ports:
       - "8080:8080"
     command: "pm2-runtime start ecosystem.config.js"
