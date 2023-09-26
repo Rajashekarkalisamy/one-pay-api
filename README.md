@@ -7,5 +7,5 @@ sudo docker compose build --no-cache && sudo docker compose up
 sudo docker compose up --build
 
 # pm2 reload
-sudo docker exec node-node-1 pm2 reload all
+sudo docker exec node-node-1 pm2 reload all --update-env
 

@@ -1,15 +1,32 @@
 version: "3.0"
 services:
+  adminer:
+    image: adminer
+    restart: always
+    container_name: adminer
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+    ports:
+      - 8081:8080
+  mysql:
+    image: mysql
+    restart: always
+    container_name: mysql
+    volumes:
+      - ../database/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "12345"
   mongo:
     image: mongo
     restart: always
     container_name: mongo
     volumes:
-      - ./mongo:/data/db
+      - ../database/mongo:/data/db
     ports:
       - '27018:27017'
   node:
     build: .
+    container_name: onepay
     working_dir: /usr/src/app
     volumes:
       - ./:/usr/src/app
