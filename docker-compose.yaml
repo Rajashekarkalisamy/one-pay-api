@@ -1,5 +1,13 @@
 version: "3.0"
 services:
+  mysql:
+    image: mysql:8.1.0
+    restart: always
+    container_name: mysql
+    volumes:
+      - ../database/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "12345"
   adminer:
     image: adminer
     restart: always
@@ -8,23 +16,25 @@ services:
       ADMINER_DEFAULT_SERVER: mysql
     ports:
       - 8081:8080
-  mysql:
-    image: mysql
-    restart: always
-    container_name: mysql
-    volumes:
-      - ../database/mysql:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: "12345"
   mongo:
-    image: mongo
+    image: mongo:7.0.1
     restart: always
     container_name: mongo
     volumes:
       - ../database/mongo:/data/db
     ports:
       - '27018:27017'
-  node:
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    links:
+      - mongo
+    ports:
+      - 8082:8081
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+
+  onepay:
     build: .
     container_name: onepay
     working_dir: /usr/src/app
@@ -34,5 +44,5 @@ services:
     links:
       - mongo
     ports:
-      - "8080:8080"
+      - "3000:8080"
     command: "pm2-runtime start ecosystem.config.js"
