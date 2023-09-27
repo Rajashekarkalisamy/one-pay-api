@@ -5,7 +5,7 @@ services:
     restart: always
     container_name: mysql
     volumes:
-      - ../database/mysql:/var/lib/mysql
+      - /docker/database/mysql:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: "12345"
   adminer:
@@ -21,7 +21,7 @@ services:
     restart: always
     container_name: mongo
     volumes:
-      - ../database/mongo:/data/db
+      - /docker/database/mongo:/data/db
     ports:
       - '27018:27017'
   mongo-express:
@@ -34,9 +34,9 @@ services:
     environment:
       - ME_CONFIG_MONGODB_SERVER=mongo
 
-  onepay:
+  one-pay-api:
     build: .
-    container_name: onepay
+    container_name: one-pay-api
     working_dir: /usr/src/app
     volumes:
       - ./:/usr/src/app
