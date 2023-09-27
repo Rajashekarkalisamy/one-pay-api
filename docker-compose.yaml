@@ -34,7 +34,7 @@ services:
     environment:
       - ME_CONFIG_MONGODB_SERVER=mongo
 
-  one-pay-api:
+  app:
     build: .
     container_name: one-pay-api
     working_dir: /usr/src/app
