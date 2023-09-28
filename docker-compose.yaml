@@ -5,6 +5,7 @@ services:
     restart: always
     container_name: mysql
     volumes:
+      - "./sql-scripts:/docker-entrypoint-initdb.d"
       - /docker/database/mysql:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: "12345"
@@ -26,6 +27,7 @@ services:
       - '27018:27017'
   mongo-express:
     image: mongo-express
+    restart: always
     container_name: mongo-express
     links:
       - mongo
@@ -33,9 +35,9 @@ services:
       - 8082:8081
     environment:
       - ME_CONFIG_MONGODB_SERVER=mongo
-
   app:
     build: .
+    restart: always
     container_name: one-pay-api
     working_dir: /usr/src/app
     volumes:
@@ -45,4 +47,3 @@ services:
       - mongo
     ports:
       - "3000:8080"
-    command: "pm2-runtime start ecosystem.config.js"

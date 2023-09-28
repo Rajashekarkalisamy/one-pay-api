@@ -15,9 +15,10 @@ Adminer: http://localhost:8081/
 Mongo Express: http://localhost:8082/
 OnePayApi: http://localhost:3000/
 
-# Notes
-    1. For the First time use the db-seed.sql file in adminer(http://localhost:8081/) to create the database and tables
-    2. Mysql credentials => server: mysql, username: root, password: 12345
+# Adminer Login credentials 
+    server: mysql, 
+    username: root, 
+    password: 12345
     
 # Useful Comands 
     pm2 reload: sudo docker exec node-node-1 pm2 reload all --update-env
