@@ -21,5 +21,5 @@ OnePayApi: http://localhost:3000/
     password: 12345
     
 # Useful Comands 
-    pm2 reload: sudo docker exec node-node-1 pm2 reload all --update-env
+    pm2 reload: sudo docker exec one-pay-api pm2 reload all --update-env
     Rebuild and Run Application : sudo docker compose build --no-cache && sudo docker compose up -d
