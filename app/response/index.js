@@ -22,7 +22,7 @@ const custom = (code, data = {}) => {
         }
     }
 }
-const error = (error) => {
+const error = (error = {}) => {
     return {
         statusCode: 404,
         data: {
@@ -49,7 +49,7 @@ const validationfail = (errors) => {
             success: false,
             statusCode: 422,
             message: Object.values(errors.all())[0][0],
-            data:errors
+            data: errors
         }
     }
 }

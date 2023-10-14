@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const Responser = require("./app/response/index");
 
 /* Environment variable kickstart */
 require('dotenv').config()
@@ -49,7 +50,8 @@ app.use('/notes', noteRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  next(createError(404));
+  let response = Responser.error();
+  return res.status(response.statusCode).send(response.data);
 });
 
 // error handler
