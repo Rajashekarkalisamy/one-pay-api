@@ -1,17 +1,18 @@
 /* Mongo Credentials */
 const sequelize = require("sequelize");
+const { getenv } = require("../app/Utils/common");
 
 module.exports.mongo = {
-  url: process.env.MONGO_URL
+  url: getenv("MONGO_URL")
 }
 
 /* Mysql Connection */
 module.exports.mysql = new sequelize(
-  process.env.MYSQL_DATABASE,
-  process.env.MYSQL_USERNAME,
-  process.env.MYSQL_PASSWORD,
+  getenv("MYSQL_DATABASE"),
+  getenv("MYSQL_USERNAME"),
+  getenv("MYSQL_PASSWORD"),
   {
-      dialect: "mysql",
-      host: process.env.MYSQL_HOST,
+    dialect: "mysql",
+    host: getenv("MYSQL_HOST"),
   }
 );
