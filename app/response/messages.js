@@ -15,8 +15,7 @@ const message = {
 
     /* Info */
     "R400": { type: "error", message: "Bad Request" },
-    "R401": { type: "error", message: "Invalid Token" },
-    "R402": { type: "error", message: "Session Expired. Login again" },
+    "R401": { type: "error", message: "Authentication Failed" },
     "R404": { type: "error", message: "Something Went Wrong, Please Try after sometime" },
 
     /* Warning */

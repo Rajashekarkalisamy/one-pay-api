@@ -4,8 +4,8 @@ const Responser = require("../response/index");
 let Validator = require('validatorjs');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { getenv, randomToken } = require('../Utils/common');
-const { json } = require('body-parser');
+const { getenv } = require('../Utils/common');
+const { USERSTATUS } = require('../../config/custom.config');
 
 const create = async (req, res) => {
 
@@ -18,7 +18,6 @@ const create = async (req, res) => {
 
     if (validation.passes()) {
         try {
-            let userName = req.body.email.split('@')[0];
             const password = await bcrypt.hash(req.body.password, 10);
 
             const token = jwt.sign(
@@ -30,15 +29,13 @@ const create = async (req, res) => {
             );
             let userData = {
                 email: req.body.email,
-                username: userName,
                 password: password,
                 email_token: token
             }
             const checkData = await model.user.findOne({
                 where: {
                     [Op.or]: {
-                        email: req.body.email,
-                        username: userName
+                        email: req.body.email
                     },
                 },
             });
@@ -83,7 +80,7 @@ const login = async (req, res) => {
 
             if (userData) {
                 if (userData.is_email_verified) {
-                    if (userData.is_active) {
+                    if (userData.is_active && userData.status == USERSTATUS.ACTIVE) {
                         const isValid = await bcrypt.compare(req.body.password, userData.password);
                         if (isValid) {
                             // Create token
@@ -94,6 +91,8 @@ const login = async (req, res) => {
                                     expiresIn: "2h",
                                 }
                             );
+                            userData.last_login = new Date();
+                            userData.save();
                             response = Responser.success({ jwt: token, create_at: new Date() });
                         } else {
                             response = Responser.custom("R205");
@@ -138,10 +137,8 @@ const verify = async (req, res) => {
                 response = Responser.custom("R401");
             }
         } catch (error) {
-            if (error.name == "JsonWebTokenError" && error.message == "invalid signature") {
+            if (error.name == "JsonWebTokenError" || error.name == "TokenExpiredError") {
                 response = Responser.custom("R401");
-            } else if (error.name == "TokenExpiredError" && error.message == "jwt expired") {
-                response = Responser.custom("R402");
             } else {
                 response = Responser.error(error);
             }
@@ -165,6 +162,8 @@ const verifyemail = async (req, res) => {
                     },
                 });
                 userData.is_email_verified = true;
+                userData.status = USERSTATUS.ACTIVE;
+                userData.email_verified_at = new Date();
                 userData.save();
                 return res.json({ message: 'Email verification successful.' });
             }

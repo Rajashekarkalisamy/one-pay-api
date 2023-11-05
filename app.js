@@ -17,7 +17,9 @@ const dbConfig = require('./config/database.config.js');
 /* Routing Files */
 const indexRouter = require('./routes/index');
 const usersRouter = require('./app/routes/users');
+const toursRouter = require('./app/routes/tours');
 const noteRouter = require('./app/routes/notes');
+const authenticate = require('./app/middlewares/authentication.js');
 
 /* Server initiation */
 var app = express();
@@ -55,6 +57,8 @@ mongoose.connect(dbConfig.mongo.url, {
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use(authenticate);
+app.use('/tours', toursRouter);
 app.use('/notes', noteRouter);
 
 // catch 404 and forward to error handler
