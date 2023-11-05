@@ -1,4 +1,4 @@
-const getMessage = require("./messages")
+const message = require("./messages")
 
 const success = (data = {}) => {
     return {
@@ -6,7 +6,8 @@ const success = (data = {}) => {
         data: {
             success: true,
             statusCode: "R200",
-            message: getMessage("R200"),
+            type: message.getType("R200"),
+            message: message.getMessage("R200"),
             data: data
         }
     }
@@ -17,7 +18,8 @@ const custom = (code, data = {}) => {
         data: {
             success: true,
             statusCode: code,
-            message: getMessage(code),
+            type: message.getType(code),
+            message: message.getMessage(code),
             data: data
         }
     }
@@ -27,7 +29,8 @@ const error = (error = {}) => {
         statusCode: 404,
         data: {
             success: false,
-            message: getMessage("R404"),
+            type: message.getType("R404"),
+            message: message.getMessage("R404"),
             data: error
         }
     }
