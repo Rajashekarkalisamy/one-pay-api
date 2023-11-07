@@ -20,6 +20,7 @@ const create = async (req, res) => {
             // Save  in the database
             await Tour.save()
                 .then(data => {
+                    console.log("Rajasekar", data)
                     response = Responser.success(data);
                 }).catch(error => {
                     response = Responser.error(error);

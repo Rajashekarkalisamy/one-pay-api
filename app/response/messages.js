@@ -15,7 +15,7 @@ const message = {
 
     /* Info */
     "R400": { type: "error", message: "Bad Request" },
-    "R401": { type: "error", message: "Authentication Failed" },
+    "R401": { type: "error", message: "Authentication Failed" }, // Frontend will Redirect to Login Screen
     "R404": { type: "error", message: "Something Went Wrong, Please Try after sometime" },
 
     /* Warning */

@@ -15,8 +15,7 @@ const authenticate = (req, res, next) => {
     jwt.verify(token, getenv("JWT_SECRET_KEY"), async (err, decoded) => {
         if (err) {
             response = Responser.custom("R401");
-        }
-        if (decoded.email) {
+        }else if (decoded.email) {
             const userData = await model.user.findOne({
                 where: {
                     email: decoded.email
