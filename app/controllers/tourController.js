@@ -1,7 +1,6 @@
 const model = require('../models/index');
 const Responser = require("../response/index");
 const Validator = require('validatorjs');
-const { getenv } = require('../Utils/common');
 
 const create = async (req, res) => {
 
@@ -35,6 +34,13 @@ const create = async (req, res) => {
     return res.status(response.statusCode).send(response.data);
 }
 
+const list = async (req, res) => {
+    const toursList = await model.tour.find({ "user_id": req.user.id });
+    response = Responser.success(toursList);
+    return res.status(response.statusCode).send(response.data);
+}
+
 module.exports = {
     create: create,
+    list: list,
 }
