@@ -5,6 +5,9 @@ const message = {
     "R201": { type: "success", message: "Thanks for registering, verify your mail address and continue to login" },
     "R206": { type: "success", message: "username/email has already in use, You can login" },
     "R207": { type: "success", message: "Please verify your mail address and continue to login" },
+    "R208": { type: "success", message: "Tour Deleted Successfully" },
+    "R209": { type: "success", message: "Tour Added Successfully" },
+    "R210": { type: "success", message: "Tour Updated Successfully" },
 
     /* Info */
 

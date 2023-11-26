@@ -13,17 +13,28 @@ const create = async (req, res) => {
 
     if (validation.passes()) {
         try {
-            // Create a Tour
-            const Tour = new model.tour({ user_id: req.user.id, ...req.body });
+            if (req.body.tour_id) {
+                try {
+                    await model.tour.findOneAndUpdate(
+                        { _id: req.body.tour_id },
+                        req.body
+                    );
+                    response = Responser.custom("R210");
+                } catch (error) {
+                    response = Responser.custom("R404");
+                }
+            } else {
+                // Create a Tour
+                const Tour = new model.tour({ user_id: req.user.id, status: true, ...req.body });
+                // Save  in the database
+                await Tour.save()
+                    .then(data => {
+                        response = Responser.custom("R209");
+                    }).catch(error => {
+                        response = Responser.error(error);
+                    });
+            }
 
-            // Save  in the database
-            await Tour.save()
-                .then(data => {
-                    console.log("Rajasekar", data)
-                    response = Responser.success(data);
-                }).catch(error => {
-                    response = Responser.error(error);
-                });
         } catch (error) {
             console.log(error)
             response = Responser.error(error);
@@ -35,12 +46,38 @@ const create = async (req, res) => {
 }
 
 const list = async (req, res) => {
-    const toursList = await model.tour.find({ "user_id": req.user.id });
+    const toursList = await model.tour.find({ "user_id": req.user.id, status: true });
     response = Responser.success(toursList);
+    return res.status(response.statusCode).send(response.data);
+}
+
+const deleteTour = async (req, res) => {
+    let response;
+    let validation = new Validator(req.body, {
+        tour_id: 'required'
+    });
+
+    if (validation.passes()) {
+        try {
+            const tour = await model.tour.findOne({ "_id": req.body.tour_id });
+            if (tour) {
+                tour.status = false;
+                tour.save();
+                response = Responser.custom("R208");
+            } else {
+                response = Responser.custom("R404");
+            }
+        } catch (error) {
+            response = Responser.custom("R404");
+        }
+    } else {
+        response = Responser.validationfail(validation.errors)
+    }
     return res.status(response.statusCode).send(response.data);
 }
 
 module.exports = {
     create: create,
     list: list,
+    delete: deleteTour
 }
