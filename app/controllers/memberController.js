@@ -6,30 +6,29 @@ const create = async (req, res) => {
 
     let response;
     let validation = new Validator(req.body, {
-        plan: 'required',
-        plan_start_date: 'required|date',
-        plan_end_date: 'required|date'
+        tour_id: 'required',
+        name: 'required',
     });
 
     if (validation.passes()) {
         try {
-            if (req.body.tour_id) {
+            if (req.body.member_id) {
                 try {
-                    await model.tour.findOneAndUpdate(
-                        { _id: req.body.tour_id },
+                    await model.member.findOneAndUpdate(
+                        { _id: req.body.member_id },
                         req.body
                     );
-                    response = Responser.custom("R209");
+                    response = Responser.custom("R212");
                 } catch (error) {
                     response = Responser.custom("R404");
                 }
             } else {
-                // Create a Tour
-                const Tour = new model.tour({ user_id: req.user.id, status: true, ...req.body });
+                // Create a Member
+                const Member = new model.member({ user_id: req.user.id, status: true, ...req.body });
                 // Save  in the database
-                await Tour.save()
+                await Member.save()
                     .then(data => {
-                        response = Responser.custom("R208", data);
+                        response = Responser.custom("R211");
                     }).catch(error => {
                         response = Responser.error(error);
                     });
@@ -46,16 +45,6 @@ const create = async (req, res) => {
 }
 
 const list = async (req, res) => {
-    try {
-        const toursList = await model.tour.find({ "user_id": req.user.id, status: true });
-        response = Responser.success(toursList);
-    } catch (error) {
-        response = Responser.error(error);
-    }
-    return res.status(response.statusCode).send(response.data);
-}
-
-const deleteTour = async (req, res) => {
     let response;
     let validation = new Validator(req.body, {
         tour_id: 'required'
@@ -63,11 +52,32 @@ const deleteTour = async (req, res) => {
 
     if (validation.passes()) {
         try {
-            const tour = await model.tour.findOne({ "_id": req.body.tour_id });
-            if (tour) {
-                tour.status = false;
-                tour.save();
-                response = Responser.custom("R210");
+            const membersList = await model.member.find({ "user_id": req.user.id, "tour_id": req.body.tour_id, status: true });
+            response = Responser.success(membersList);
+        } catch (error) {
+            console.log(error)
+            response = Responser.error(error);
+        }
+    } else {
+        response = Responser.validationfail(validation.errors)
+    }
+    return res.status(response.statusCode).send(response.data);
+}
+
+
+const deleteMember = async (req, res) => {
+    let response;
+    let validation = new Validator(req.body, {
+        member_id: 'required'
+    });
+
+    if (validation.passes()) {
+        try {
+            const member = await model.member.findOne({ "_id": req.body.member_id });
+            if (member) {
+                member.status = false;
+                member.save();
+                response = Responser.custom("R213");
             } else {
                 response = Responser.custom("R404");
             }
@@ -83,5 +93,5 @@ const deleteTour = async (req, res) => {
 module.exports = {
     create: create,
     list: list,
-    delete: deleteTour
+    delete: deleteMember
 }

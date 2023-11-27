@@ -18,6 +18,7 @@ const dbConfig = require('./config/database.config.js');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./app/routes/users');
 const toursRouter = require('./app/routes/tours');
+const membersRouter = require('./app/routes/members');
 const noteRouter = require('./app/routes/notes');
 const authenticate = require('./app/middlewares/authentication.js');
 const corsall = require('./app/middlewares/corsall.js');
@@ -55,6 +56,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use(authenticate);
 app.use('/tours', toursRouter);
+app.use('/members', membersRouter);
 app.use('/notes', noteRouter);
 
 // catch 404 and forward to error handler
