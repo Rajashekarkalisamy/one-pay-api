@@ -18,8 +18,10 @@ const dbConfig = require('./config/database.config.js');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./app/routes/users');
 const toursRouter = require('./app/routes/tours');
+const membersRouter = require('./app/routes/members');
 const noteRouter = require('./app/routes/notes');
 const authenticate = require('./app/middlewares/authentication.js');
+const corsall = require('./app/middlewares/corsall.js');
 
 /* Server initiation */
 var app = express();
@@ -31,12 +33,7 @@ app.use(logger('dev'));
 
 /* cors */
 app.use(cors());
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', "*");
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
+app.use(corsall);
 /* cors */
 
 app.use(express.json());
@@ -59,6 +56,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use(authenticate);
 app.use('/tours', toursRouter);
+app.use('/members', membersRouter);
 app.use('/notes', noteRouter);
 
 // catch 404 and forward to error handler

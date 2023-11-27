@@ -6,6 +6,14 @@ const message = {
     "R206": { type: "success", message: "username/email has already in use, You can login" },
     "R207": { type: "success", message: "Please verify your mail address and continue to login" },
 
+    "R208": { type: "success", message: "Tour Added Successfully, You can add the Members" },
+    "R209": { type: "success", message: "Tour Updated Successfully" },
+    "R210": { type: "success", message: "Tour Deleted Successfully" },
+
+    "R211": { type: "success", message: "Member Added Successfully" },
+    "R212": { type: "success", message: "Member Updated Successfully" },
+    "R213": { type: "success", message: "Member Deleted Successfully" },
+
     /* Info */
 
     "R202": { type: "info", message: "Mail Id Not registered" },
@@ -15,7 +23,7 @@ const message = {
 
     /* Info */
     "R400": { type: "error", message: "Bad Request" },
-    "R401": { type: "error", message: "Authentication Failed" },
+    "R401": { type: "error", message: "Authentication Failed" }, // Frontend will Redirect to Login Screen
     "R404": { type: "error", message: "Something Went Wrong, Please Try after sometime" },
 
     /* Warning */

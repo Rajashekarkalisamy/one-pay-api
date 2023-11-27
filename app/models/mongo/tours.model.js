@@ -5,7 +5,8 @@ const TourSchema = mongoose.Schema({
     plan: String,
     description: String,
     plan_start_date: Date,
-    plan_end_date: Date
+    plan_end_date: Date,
+    status: Boolean
 }, {
     timestamps: true
 });
