@@ -1,6 +1,6 @@
 const sequelize = require("sequelize");
 const db = require("../../../config/database.config").mysql;
-var user = db.define(
+const user = db.define(
     "user",
     {
         id: { type: sequelize.INTEGER, primaryKey: true },
