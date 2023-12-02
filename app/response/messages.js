@@ -14,6 +14,10 @@ const message = {
     "R212": { type: "success", message: "Member Updated Successfully" },
     "R213": { type: "success", message: "Member Deleted Successfully" },
 
+    "R214": { type: "success", message: "Added Successfully" },
+    "R215": { type: "success", message: "Data Updated Successfully" },
+    "R216": { type: "success", message: "Deleted Successfully" },
+
     /* Info */
 
     "R202": { type: "info", message: "Mail Id Not registered" },
