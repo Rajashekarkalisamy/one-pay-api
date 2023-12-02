@@ -33,7 +33,7 @@ const create = async (req, res) => {
                 // Save  in the database
                 await Account.save()
                     .then(data => {
-                        response = Responser.custom("R214",Account);
+                        response = Responser.custom("R214", Account);
                     }).catch(error => {
                         response = Responser.error(error);
                     });
@@ -57,7 +57,7 @@ const list = async (req, res) => {
 
     if (validation.passes()) {
         try {
-            const accountsList = await model.account.find({ "user_id": req.user.id, "tour_id": req.body.tour_id, status: true });
+            const accountsList = await model.account.find({ "user_id": req.user.id, "tour_id": req.body.tour_id, status: true }).sort({ date: 1, type: 1 });
             response = Responser.success(accountsList);
         } catch (error) {
             console.log(error)
