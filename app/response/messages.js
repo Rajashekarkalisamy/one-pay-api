@@ -18,6 +18,11 @@ const message = {
     "R215": { type: "success", message: "Data Updated Successfully" },
     "R216": { type: "success", message: "Deleted Successfully" },
 
+    "R217": { type: "success", message: "Mail has sent successfully" },
+    "R218": { type: "error", message: "Mail has sent failed" },
+    "R219": { type: "error", message: "Invalid Email" },
+    "R220": { type: "error", message: "Email is not active" },
+
     /* Info */
 
     "R202": { type: "info", message: "Mail Id Not registered" },

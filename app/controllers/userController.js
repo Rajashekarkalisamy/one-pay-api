@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { getenv } = require('../Utils/common');
 const { USERSTATUS } = require('../../config/custom.config');
+const smtpMailController = require('./smtpMailController')
+
 
 const create = async (req, res) => {
 
@@ -172,9 +174,65 @@ const verifyemail = async (req, res) => {
         return res.status(404).json({ message: error.message });
     }
 }
+
+const forgotPassword = async (req, res) => {
+
+    let validation = new Validator(req.body, {
+        email: 'required|email'
+    });
+
+    let response;
+    if (validation.passes()) {
+        try {
+            const userData = await model.user.findOne({
+                where: {
+                    email: req.body.email
+                },
+            });
+
+            if (userData) {
+                if (userData.is_email_verified) {
+                    const token = jwt.sign(
+                        { user_id: userData._id, email: userData.email },
+                        getenv("JWT_SECRET_KEY"),
+                        {
+                            expiresIn: "2h",
+                        }
+                    );
+                    userData.last_login = new Date();
+                    userData.email_token = token;
+                    await userData.save();
+                    req.body.email_token = token;
+                    if (userData.is_active && userData.status == USERSTATUS.ACTIVE) {
+                        const isValid = await smtpMailController.forgotPasswordMail(req);
+                        if (isValid) {
+                            response = Responser.custom("R217");
+                        } else {
+                            response = Responser.custom("R218");
+                        }
+                    } else {
+                        response = Responser.custom("R220");
+                    }
+                } else {
+                    response = Responser.custom("R220");
+                }
+
+            } else {
+                response = Responser.custom("R219");
+            }
+        } catch (error) {
+            response = Responser.error(error);
+        }
+    } else {
+        response = Responser.validationfail(validation.errors)
+    }
+
+    return res.status(response.statusCode).send(response.data);
+}
 module.exports = {
     create: create,
     login: login,
     verify: verify,
-    verifyemail: verifyemail
+    verifyemail: verifyemail,
+    forgotPassword: forgotPassword
 }
